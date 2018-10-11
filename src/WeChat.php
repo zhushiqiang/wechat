@@ -45,15 +45,15 @@ class WeChat
     {
         $url = 'https://qyapi.weixin.qq.com/cgi-bin/service/get_suite_token';
 
-        $query = array_filter([
+        $query = json_encode(array_filter([
             'suite_id' => $this->suite_id,
             'suite_secret' => $this->suite_secret,
             'suite_ticket' => $suite_ticket,
-        ]);
+        ]));
 
         $this->suit_token = json_decode($this->getHttpClient()->post($url, [
-            'query' => $query,
-        ])->getBody()->getContents(),true)['suit_token'];
+            'body' => $query,
+        ])->getBody()->getContents(),true)['suite_access_token'];
 
         return $this;
     }
