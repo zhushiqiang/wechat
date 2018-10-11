@@ -20,6 +20,7 @@ class WeChat
     public function __construct(string $suite_id ,string $suite_secret)
     {
         $this->suite_id = $suite_id;
+		$this->suite_secret = $suite_secret;
     }
 
     /**
