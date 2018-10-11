@@ -1,0 +1,19 @@
+{
+    "name": "shiqiang\/wechat",
+    "description": "Package description here.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "shiqiang",
+            "email": "zhushiqiang@xinchanedu.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Shiqiang\\WeChat\\": "src"
+        }
+    }
+}
