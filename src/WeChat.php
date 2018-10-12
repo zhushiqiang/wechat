@@ -3,6 +3,7 @@
 namespace Shiqiang\WeChat;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Cache;
 
 class WeChat
 {
@@ -67,15 +68,20 @@ class WeChat
     public function getPreAuthCode()
     {
         $url = 'https://qyapi.weixin.qq.com/cgi-bin/service/get_pre_auth_code';
-
-        $query = array_filter([
+		$pre_auth_code = Cache::get('pre_auth_code');
+		if($pre_auth_code){
+			$this->pre_auth_code = $pre_auth_code;
+		}else{
+			$query = array_filter([
             'suite_access_token' => $this->suit_token,
-        ]);
+			]);
 
-        $this->pre_auth_code = json_decode($this->getHttpClient()->get($url, [
-            'query' => $query,
-        ])->getBody()->getContents(),true)['pre_auth_code'];
-		
+			$this->pre_auth_code = json_decode($this->getHttpClient()->get($url, [
+				'query' => $query,
+			])->getBody()->getContents(),true)['pre_auth_code'];
+			Cache::put('pre_auth_code', $this->pre_auth_code, 20);
+		}
+        
 		if($this->auth_type == 1){
 			$query = json_encode(array_filter([
 				'pre_auth_code' => $this->pre_auth_code,
