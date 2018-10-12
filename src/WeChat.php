@@ -9,10 +9,10 @@ class WeChat
 {
     protected $suite_id;
     protected $suite_secret;
-    protected $suit_token;
-    protected $pre_auth_code;
-    protected $guzzleOptions = [];
-	protected $auth_type;
+    public $suit_token;
+    public $pre_auth_code;
+    public $guzzleOptions = [];
+	public $auth_type;
 
     /**
      * WeChat constructor.
@@ -89,8 +89,9 @@ class WeChat
 					'auth_type' => 1
 				],
 			]));
+			$url = 'https://qyapi.weixin.qq.com/cgi-bin/service/set_session_info?suite_access_token=' . $this->suit_token;
 			$this->getHttpClient()->get($url, [
-				'query' => $query,
+				'body' => $query,
 			])->getBody()->getContents();
 		}
 
