@@ -11,16 +11,18 @@ class WeChat
     protected $suit_token;
     protected $pre_auth_code;
     protected $guzzleOptions = [];
+	protected $auth_type;
 
     /**
      * WeChat constructor.
      * @param string $suite_id
      * @param string $suite_secret
      */
-    public function __construct(string $suite_id ,string $suite_secret)
+    public function __construct(string $suite_id ,string $suite_secret ,int $auth_type=0)
     {
         $this->suite_id = $suite_id;
 		$this->suite_secret = $suite_secret;
+		$this->auth_type = $auth_type;
     }
 
     /**
@@ -73,6 +75,18 @@ class WeChat
         $this->pre_auth_code = json_decode($this->getHttpClient()->get($url, [
             'query' => $query,
         ])->getBody()->getContents(),true)['pre_auth_code'];
+		
+		if($this->auth_type == 1){
+			$query = json_encode(array_filter([
+				'pre_auth_code' => $this->pre_auth_code,
+				'session_info' => [
+					'auth_type' => 1
+				],
+			]));
+			$this->getHttpClient()->get($url, [
+				'query' => $query,
+			])->getBody()->getContents();
+		}
 
         return $this;
     }
@@ -93,5 +107,5 @@ class WeChat
         );
         $url .= "?".http_build_query($param);
         return $url;
-    }
+    } 
 }
